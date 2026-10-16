@@ -1,0 +1,32 @@
+name: Recommend a book
+description: Suggest a book for Ashar’s bookshelf.
+title: "Book recommendation: "
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Book title
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: Author
+    validations:
+      required: true
+  - type: input
+    id: isbn
+    attributes:
+      label: ISBN (optional)
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+      description: This name will appear on the public shelf if your recommendation is accepted.
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Why should I read it?
+      description: Optional. Please keep this to 500 characters; it may be published with the recommendation.

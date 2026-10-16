@@ -1,59 +1,307 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#e5e3dc">
-  <meta name="description" content="Ashar’s personal library. A quiet place for the books you’ve loved and the ones still waiting.">
-  <title>Ashar’s Library — A personal archive</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='5' y='6' width='8' height='28' rx='1' fill='%23545e4b'/%3E%3Crect x='15' y='9' width='8' height='25' rx='1' fill='%23b27859'/%3E%3Crect x='25' y='4' width='8' height='30' rx='1' fill='%23ad9c73'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./src/styles.css">
-  <script type="module" src="./src/app.js"></script>
-</head>
-<body>
-  <main class="paper">
-    <section class="library-hero" aria-label="Ashar’s library">
-      <header class="library-header">
-        <p class="eyebrow">A personal archive</p>
-        <h1>Welcome to my library<span class="cursor" aria-hidden="true"></span></h1>
-        <p class="volume-count" id="volume-count" aria-live="polite"></p>
-        <button class="pill primary-action" id="add-book"><span aria-hidden="true">＋</span> Add a book</button>
-        <div class="filters">
-          <label class="sr-only" for="shelf-search">Search your library</label>
-          <div class="search-wrap"><input type="search" id="shelf-search" placeholder="What are you looking for?" autocomplete="off"><button id="clear-search" aria-label="Clear search" hidden>×</button></div>
-          <div class="genre-filters" id="genre-filters" role="group" aria-label="Filter by genre"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e5e3dc" />
+    <meta
+      name="description"
+      content="Ashar’s personal library. Books I’ve finished, thoughts worth keeping, and recommendations from fellow readers."
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://covers.openlibrary.org data:; connect-src 'self' https://openlibrary.org; object-src 'none'; base-uri 'self'; form-action 'self' https://github.com"
+    />
+    <title>Ashar’s Bookshelf</title>
+    <link rel="icon" type="image/svg+xml" href="./src/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500;700&family=Space+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <main class="paper">
+      <section class="library-hero" aria-label="Ashar’s library">
+        <header class="library-header">
+          <p class="eyebrow">A personal archive</p>
+          <h1>
+            Welcome to my library<span class="cursor" aria-hidden="true"></span>
+          </h1>
+          <p class="volume-count" id="volume-count" aria-live="polite">
+            Loading the shelves…
+          </p>
+          <button class="pill primary-action" id="recommend-book">
+            Recommend a book
+          </button>
+          <div class="filters">
+            <label class="sr-only" for="shelf-search">Search the library</label>
+            <div class="search-wrap">
+              <input
+                type="search"
+                id="shelf-search"
+                placeholder="What are you looking for?"
+                autocomplete="off"
+              /><button id="clear-search" aria-label="Clear search" hidden>
+                ×
+              </button>
+            </div>
+            <div
+              class="genre-filters"
+              id="genre-filters"
+              role="group"
+              aria-label="Filter by genre"
+            ></div>
+          </div>
+          <div id="library-error" class="status-banner" role="alert" hidden>
+            <p id="library-error-text"></p>
+            <button class="text-button" id="retry-library">Try again ↗</button>
+          </div>
+        </header>
+        <div class="shelf-scene" id="read-scene">
+          <div
+            class="shelf-viewport"
+            id="read-shelf"
+            tabindex="0"
+            role="region"
+            aria-label="Read books. Scroll horizontally to explore."
+          >
+            <div class="book-track" id="read-track"></div>
+          </div>
+          <div class="shelf-line" aria-hidden="true"></div>
+          <div class="shelf-floor">
+            <p class="shelf-hint" id="shelf-hint" hidden>
+              Drag to explore <span aria-hidden="true">·</span> Click a spine to
+              open
+            </p>
+          </div>
         </div>
-      </header>
-      <div class="shelf-scene" id="read-scene">
-        <div class="shelf-viewport" id="read-shelf" tabindex="0" role="region" aria-label="Read books. Scroll horizontally to explore."><div class="book-track" id="read-track"></div></div>
-        <div class="shelf-line" aria-hidden="true"></div>
-        <div class="shelf-floor"><p class="shelf-hint">Drag to explore <span aria-hidden="true">·</span> Click a spine to open</p></div>
+      </section>
+      <section class="recommended-section" aria-labelledby="recommended-title">
+        <header class="section-header">
+          <p class="eyebrow">Recommended to me</p>
+          <h2 id="recommended-title">The recommendation shelf</h2>
+          <p class="volume-count" id="recommended-count" aria-live="polite"></p>
+        </header>
+        <div class="shelf-scene" id="recommended-scene">
+          <div
+            class="shelf-viewport"
+            id="recommended-shelf"
+            tabindex="0"
+            role="region"
+            aria-label="Recommended books. Scroll horizontally to explore."
+          >
+            <div class="book-track" id="recommended-track"></div>
+          </div>
+          <div class="shelf-line" aria-hidden="true"></div>
+          <div class="shelf-floor"></div>
+        </div>
+      </section>
+      <footer>
+        <span>Ashar’s library</span
+        ><a
+          class="text-button"
+          href="https://openlibrary.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Book data from Open Library ↗</a
+        ><button class="text-button" id="manage-library" hidden>
+          Manage library ↗
+        </button>
+      </footer>
+    </main>
+    <noscript
+      ><p class="noscript-message">
+        Please enable JavaScript to browse the shelves and recommend a book.
+      </p></noscript
+    >
+    <div id="book-tooltip" class="book-tooltip" role="tooltip" hidden></div>
+    <dialog
+      id="book-dialog"
+      class="book-dialog"
+      aria-labelledby="detail-title"
+    ></dialog>
+    <dialog
+      id="recommend-dialog"
+      class="recommend-dialog"
+      aria-labelledby="entry-title"
+    >
+      <button class="close-dialog" data-close aria-label="Close book form">
+        ×
+      </button>
+      <p class="eyebrow" id="entry-eyebrow">Good books are better shared</p>
+      <h2 id="entry-title">Recommend a book.</h2>
+      <p class="dialog-description" id="entry-description"></p>
+      <div id="lookup-panel">
+        <form id="lookup-form" class="lookup-form">
+          <label for="lookup">Search by title, author, or ISBN</label>
+          <div class="lookup-row">
+            <input
+              id="lookup"
+              placeholder="Start typing a title, author, or ISBN…"
+              aria-describedby="lookup-status"
+              autocomplete="off"
+              minlength="2"
+              maxlength="200"
+              required
+            /><button class="pill" type="submit">Search ↗</button>
+          </div>
+        </form>
+        <p class="lookup-caption" id="lookup-status" role="status">
+          Type a title, author, or ISBN to search Open Library.
+        </p>
+        <div
+          id="lookup-results"
+          class="lookup-results"
+          aria-live="polite"
+        ></div>
+        <button class="text-button" id="manual-entry">
+          Can’t find it? Enter it manually ↗
+        </button>
       </div>
-    </section>
-    <section class="to-read-section" aria-labelledby="to-read-title">
-      <header class="section-header"><p class="eyebrow">A little anticipation</p><h2 id="to-read-title">The to-read shelf</h2><p class="volume-count" id="to-read-count" aria-live="polite"></p></header>
-      <div class="shelf-scene" id="to-read-scene">
-        <div class="shelf-viewport" id="to-read-shelf" tabindex="0" role="region" aria-label="To-read books. Scroll horizontally to explore."><div class="book-track" id="to-read-track"></div></div>
-        <div class="shelf-line" aria-hidden="true"></div><div class="shelf-floor"></div>
+      <form id="manual-form" class="recommend-form" hidden>
+        <label for="manual-title">Book title</label
+        ><input id="manual-title" maxlength="200" required />
+        <label for="manual-author">Author</label
+        ><input id="manual-author" maxlength="160" required />
+        <label for="manual-isbn">ISBN <span>(optional)</span></label
+        ><input id="manual-isbn" maxlength="32" inputmode="text" />
+        <div class="recommend-actions">
+          <button type="button" class="text-button" id="back-to-search">
+            ← Search instead</button
+          ><button class="pill" type="submit">Next →</button>
+        </div>
+      </form>
+      <form id="entry-form" class="recommend-form" hidden>
+        <div id="recommend-selection" class="recommend-selection"></div>
+        <label for="entry-genre">Genre</label
+        ><select id="entry-genre"></select>
+        <div id="recommendation-fields">
+          <label for="recommender-name">Your name</label
+          ><input
+            id="recommender-name"
+            maxlength="60"
+            autocomplete="given-name"
+            required
+            pattern=".*\S.*"
+          /><label for="recommend-note"
+            >Why should I read it? <span>(optional)</span></label
+          ><textarea
+            id="recommend-note"
+            maxlength="500"
+            rows="3"
+            placeholder="What made it stay with you?"
+          ></textarea>
+        </div>
+        <div id="reading-fields" hidden>
+          <label for="entry-rating">Your rating</label
+          ><select id="entry-rating">
+            <option value="0">Not rated</option>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+            <option value="4">4 stars</option>
+            <option value="5">5 stars</option></select
+          ><label for="entry-notes"
+            >Your thoughts
+            <span>(optional, published with the book)</span></label
+          ><textarea id="entry-notes" maxlength="3000" rows="3"></textarea>
+        </div>
+        <p id="entry-destination" class="lookup-caption"></p>
+        <div class="recommend-actions">
+          <button class="text-button" id="choose-another" type="button">
+            ← Another book</button
+          ><button class="pill" id="save-entry" type="submit">
+            Continue on GitHub ↗
+          </button>
+        </div>
+      </form>
+      <p class="form-error" id="entry-error" role="alert" hidden></p>
+    </dialog>
+    <dialog
+      id="manage-dialog"
+      class="recommend-dialog"
+      aria-labelledby="manage-title"
+    >
+      <button
+        class="close-dialog"
+        data-close
+        aria-label="Close library management"
+      >
+        ×
+      </button>
+      <p class="eyebrow">Your personal archive</p>
+      <h2 id="manage-title">Make it yours.</h2>
+      <p class="dialog-description">
+        Changes save directly to the project’s book files. Commit and push to
+        publish them on your website.
+      </p>
+      <div class="manage-actions">
+        <button class="pill" id="add-finished">Add a finished book ＋</button
+        ><button class="pill" id="add-recommended">
+          Add a recommendation ＋
+        </button>
       </div>
-    </section>
-    <footer><span>Ashar’s library</span><p>Example books · Design preview</p><button class="text-button" id="about-preview">About this preview <span aria-hidden="true">↗</span></button></footer>
-  </main>
-  <div id="book-tooltip" class="book-tooltip" role="tooltip" hidden></div>
-  <dialog id="book-dialog" class="book-dialog" aria-labelledby="detail-title"></dialog>
-  <dialog id="add-dialog" class="add-dialog" aria-labelledby="add-title">
-    <button class="close-dialog" data-close aria-label="Close add book dialog">×</button>
-    <p class="eyebrow">Make room on the shelf</p><h2 id="add-title">One more chapter.</h2>
-    <p class="dialog-description">A little preview of how adding books will feel.</p>
-    <form id="lookup-form" class="lookup-form"><label for="lookup">Search by title, author, or ISBN</label><div class="lookup-row"><input id="lookup" placeholder="Try Atomic Habits or James Clear" autocomplete="off"><button class="pill" type="submit">Search <span aria-hidden="true">↗</span></button></div></form>
-    <p class="lookup-caption">Sample catalogue for now. Live book search comes next.</p>
-    <div id="lookup-results" class="lookup-results" aria-live="polite"></div>
-    <p class="prototype-note">Design preview · Any books added here reset on refresh.</p>
-  </dialog>
-  <dialog id="about-dialog" class="add-dialog about-dialog" aria-labelledby="about-title"><button class="close-dialog" data-close aria-label="Close preview information">×</button><p class="eyebrow">The first chapter</p><h2 id="about-title">A library, taking shape.</h2><p>This is a working design preview with example books, inspired by Carol’s Library. Explore the spines, filter by genre, and open a book.</p><p>The proposed structure is simple: your finished books up top, the books you want to read below, and a quick search to add the next one.</p><p>Once the layout is settled, the next stage is live title / author / ISBN search, permanent storage, ratings, and personal notes.</p><p class="prototype-note">No account or data storage is connected yet. Changes reset on refresh.</p></dialog>
-  <div id="toast" class="toast" role="status" hidden></div>
-</body>
+      <p class="lookup-caption">
+        To edit or remove a book, open its spine and choose Edit book. This
+        editor is available only on the local development server.
+      </p>
+    </dialog>
+    <dialog
+      id="edit-dialog"
+      class="recommend-dialog"
+      aria-labelledby="edit-title"
+    >
+      <button class="close-dialog" data-close aria-label="Close book editor">
+        ×
+      </button>
+      <p class="eyebrow">In your own words</p>
+      <h2 id="edit-title">Edit book.</h2>
+      <form id="edit-form" class="recommend-form">
+        <label for="edit-book-title">Title</label
+        ><input id="edit-book-title" maxlength="200" required /><label
+          for="edit-author"
+          >Author</label
+        ><input id="edit-author" maxlength="160" required /><label
+          for="edit-isbn"
+          >ISBN <span>(optional)</span></label
+        ><input id="edit-isbn" maxlength="32" /><label for="edit-genre"
+          >Genre</label
+        ><select id="edit-genre"></select>
+        <div id="edit-reading">
+          <label for="edit-rating">Rating</label
+          ><select id="edit-rating">
+            <option value="0">Not rated</option>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+            <option value="4">4 stars</option>
+            <option value="5">5 stars</option></select
+          ><label for="edit-notes"
+            >Your thoughts <span>(published with the book)</span></label
+          ><textarea id="edit-notes" maxlength="3000" rows="3"></textarea>
+        </div>
+        <div id="edit-recommendation">
+          <label for="edit-recommender">Recommended by</label
+          ><input id="edit-recommender" maxlength="60" required /><label
+            for="edit-note"
+            >Recommendation note</label
+          ><textarea id="edit-note" maxlength="500" rows="3"></textarea>
+        </div>
+        <p id="edit-error" class="form-error" role="alert" hidden></p>
+        <div class="recommend-actions">
+          <button type="button" class="text-button danger" id="delete-book">
+            Remove book</button
+          ><button class="pill" id="save-edit" type="submit">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
 </html>

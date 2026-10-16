@@ -21,10 +21,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: "24"
           package-manager-cache: false
       - name: Check JavaScript
         run: npm run check
+      - name: Run tests
+        run: npm test
       - name: Build static site
         run: npm run build
       - name: Configure GitHub Pages

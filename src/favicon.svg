@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Stack of books</title>
+  <!-- Bold silhouettes stay readable at browser-tab sizes. -->
+  <path fill="#52644f" d="M10 42h46v16H10a8 8 0 0 1 0-16Z"/>
+  <path fill="#f1e7d3" d="M12 46h40v8H12a4 4 0 0 1 0-8Z"/>
+  <path fill="#b27755" d="M8 25h43a8 8 0 0 1 0 16H8Z"/>
+  <path fill="#f1e7d3" d="M12 29h37a4 4 0 0 1 0 8H12Z"/>
+  <path fill="#aa965e" d="m14 10 39-4 2 16-39 4a8 8 0 0 1-2-16Z"/>
+  <path fill="#f1e7d3" d="m16 14 33-3 1 8-33 3a4 4 0 0 1-1-8Z"/>
+</svg>
