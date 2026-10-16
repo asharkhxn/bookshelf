@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e5e3dc">
+  <meta name="description" content="Ashar’s personal library. A quiet place for the books you’ve loved and the ones still waiting.">
+  <title>Ashar’s Library — A personal archive</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='5' y='6' width='8' height='28' rx='1' fill='%23545e4b'/%3E%3Crect x='15' y='9' width='8' height='25' rx='1' fill='%23b27859'/%3E%3Crect x='25' y='4' width='8' height='30' rx='1' fill='%23ad9c73'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Karla:wght@300;400;500;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <main class="paper">
+    <section class="library-hero" aria-label="Ashar’s library">
+      <header class="library-header">
+        <p class="eyebrow">A personal archive</p>
+        <h1>Welcome to my library<span class="cursor" aria-hidden="true"></span></h1>
+        <p class="volume-count" id="volume-count" aria-live="polite"></p>
+        <button class="pill primary-action" id="add-book"><span aria-hidden="true">＋</span> Add a book</button>
+        <div class="filters">
+          <label class="sr-only" for="shelf-search">Search your library</label>
+          <div class="search-wrap"><input type="search" id="shelf-search" placeholder="What are you looking for?" autocomplete="off"><button id="clear-search" aria-label="Clear search" hidden>×</button></div>
+          <div class="genre-filters" id="genre-filters" role="group" aria-label="Filter by genre"></div>
+        </div>
+      </header>
+      <div class="shelf-scene" id="read-scene">
+        <div class="shelf-viewport" id="read-shelf" tabindex="0" role="region" aria-label="Read books. Scroll horizontally to explore."><div class="book-track" id="read-track"></div></div>
+        <div class="shelf-line" aria-hidden="true"></div>
+        <div class="shelf-floor"><p class="shelf-hint">Drag to explore <span aria-hidden="true">·</span> Click a spine to open</p></div>
+      </div>
+    </section>
+    <section class="to-read-section" aria-labelledby="to-read-title">
+      <header class="section-header"><p class="eyebrow">A little anticipation</p><h2 id="to-read-title">The to-read shelf</h2><p class="volume-count" id="to-read-count" aria-live="polite"></p></header>
+      <div class="shelf-scene" id="to-read-scene">
+        <div class="shelf-viewport" id="to-read-shelf" tabindex="0" role="region" aria-label="To-read books. Scroll horizontally to explore."><div class="book-track" id="to-read-track"></div></div>
+        <div class="shelf-line" aria-hidden="true"></div><div class="shelf-floor"></div>
+      </div>
+    </section>
+    <footer><span>Ashar’s library</span><p>Example books · Design preview</p><button class="text-button" id="about-preview">About this preview <span aria-hidden="true">↗</span></button></footer>
+  </main>
+  <div id="book-tooltip" class="book-tooltip" role="tooltip" hidden></div>
+  <dialog id="book-dialog" class="book-dialog" aria-labelledby="detail-title"></dialog>
+  <dialog id="add-dialog" class="add-dialog" aria-labelledby="add-title">
+    <button class="close-dialog" data-close aria-label="Close add book dialog">×</button>
+    <p class="eyebrow">Make room on the shelf</p><h2 id="add-title">One more chapter.</h2>
+    <p class="dialog-description">A little preview of how adding books will feel.</p>
+    <form id="lookup-form" class="lookup-form"><label for="lookup">Search by title, author, or ISBN</label><div class="lookup-row"><input id="lookup" placeholder="Try Atomic Habits or James Clear" autocomplete="off"><button class="pill" type="submit">Search <span aria-hidden="true">↗</span></button></div></form>
+    <p class="lookup-caption">Sample catalogue for now. Live book search comes next.</p>
+    <div id="lookup-results" class="lookup-results" aria-live="polite"></div>
+    <p class="prototype-note">Design preview · Any books added here reset on refresh.</p>
+  </dialog>
+  <dialog id="about-dialog" class="add-dialog about-dialog" aria-labelledby="about-title"><button class="close-dialog" data-close aria-label="Close preview information">×</button><p class="eyebrow">The first chapter</p><h2 id="about-title">A library, taking shape.</h2><p>This is a working design preview with example books, inspired by Carol’s Library. Explore the spines, filter by genre, and open a book.</p><p>The proposed structure is simple: your finished books up top, the books you want to read below, and a quick search to add the next one.</p><p>Once the layout is settled, the next stage is live title / author / ISBN search, permanent storage, ratings, and personal notes.</p><p class="prototype-note">No account or data storage is connected yet. Changes reset on refresh.</p></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

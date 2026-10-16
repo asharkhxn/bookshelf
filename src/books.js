@@ -1,0 +1,65 @@
+// Curated example metadata, not the owner's reading history or ratings.
+const entries = [
+ ['The Creative Act','Rick Rubin','Nonfiction','9780593652886','#ddd6bb'],
+ ['The Midnight Library','Matt Haig','Fiction','9780525559474','#283b4a'],
+ ['Atomic Habits','James Clear','Nonfiction','9780735211292','#e7e0cd'],
+ ['Dune','Frank Herbert','Sci-Fi','9780441172719','#b66c42'],
+ ['Normal People','Sally Rooney','Fiction','9781984822178','#a7b5a0'],
+ ['The Psychology of Money','Morgan Housel','Nonfiction','9780857197689','#48644b'],
+ ['The Secret History','Donna Tartt','Fiction','9781400031702','#aea18c'],
+ ['Project Hail Mary','Andy Weir','Sci-Fi','9780593135204','#d6bc76'],
+ ['The Stranger','Albert Camus','Fiction','9780679720201','#c9c0a5'],
+ ['Sapiens','Yuval Noah Harari','Nonfiction','9780062316097','#dbd2b9'],
+ ['The Hobbit','J. R. R. Tolkien','Fantasy','9780547928227','#52624b'],
+ ['Never Let Me Go','Kazuo Ishiguro','Fiction','9781400078776','#b99165'],
+ ['Piranesi','Susanna Clarke','Fantasy','9781635575637','#344f58'],
+ ['A Little Life','Hanya Yanagihara','Fiction','9780804172707','#373838'],
+ ['The Design of Everyday Things','Don Norman','Nonfiction','9780465050659','#b9a86d'],
+ ['The Alchemist','Paulo Coelho','Fiction','9780061122415','#a85537'],
+ ['Kafka on the Shore','Haruki Murakami','Fiction','9781400079278','#a9bcc0'],
+ ['The Silent Patient','Alex Michaelides','Mystery & Thriller','9781250301697','#d9d3bd'],
+ ['The Left Hand of Darkness','Ursula K. Le Guin','Sci-Fi','9780441478125','#758c91'],
+ ['On Earth We’re Briefly Gorgeous','Ocean Vuong','Fiction','9780525562023','#d3b4a3'],
+ ['Deep Work','Cal Newport','Nonfiction','9781455586691','#c9c4ac'],
+ ['The Remains of the Day','Kazuo Ishiguro','Fiction','9780679731726','#4f6459'],
+ ['Exhalation','Ted Chiang','Sci-Fi','9781101972083','#a08a58'],
+ ['Pride and Prejudice','Jane Austen','Romance','9780141439518','#a4a08a'],
+ ['The Picture of Dorian Gray','Oscar Wilde','Fiction','9780141439570','#3e4e43'],
+ ['Thinking, Fast and Slow','Daniel Kahneman','Nonfiction','9780374533557','#ddcda8'],
+ ['Norwegian Wood','Haruki Murakami','Fiction','9780375704024','#a94f40'],
+ ['The Song of Achilles','Madeline Miller','Romance','9780062060624','#9b986d'],
+ ['All Systems Red','Martha Wells','Sci-Fi','9780765397539','#485765'],
+ ['Circe','Madeline Miller','Fantasy','9780316556347','#a67543'],
+ ['Educated','Tara Westover','Nonfiction','9780399590504','#b5aa8b'],
+ ['Anxious People','Fredrik Backman','Fiction','9781501160844','#b1beb4'],
+ ['The Three-Body Problem','Liu Cixin','Sci-Fi','9780765382030','#a76b54'],
+ ['The Little Prince','Antoine de Saint-Exupéry','Fiction','9780156012195','#c2c9b8'],
+ ['And Then There Were None','Agatha Christie','Mystery & Thriller','9780062073488','#625a59'],
+ ['A Psalm for the Wild-Built','Becky Chambers','Sci-Fi','9781250236210','#72866b'],
+ ['Tomorrow, and Tomorrow, and Tomorrow','Gabrielle Zevin','Fiction','9780593321201','#b79a65'],
+ ['The Lord of the Rings','J. R. R. Tolkien','Fantasy','9780544003415','#6a5144'],
+ ['Four Thousand Weeks','Oliver Burkeman','Nonfiction','9780374159122','#cfb579'],
+ ['The Bell Jar','Sylvia Plath','Fiction','9780060837020','#899ba4'],
+ ['The Dispossessed','Ursula K. Le Guin','Sci-Fi','9780061054884','#b07854'],
+ ['The Seven Husbands of Evelyn Hugo','Taylor Jenkins Reid','Romance','9781501161933','#4d725d'],
+ ['The Ocean at the End of the Lane','Neil Gaiman','Fantasy','9780062255662','#4b6170'],
+ ['A Gentleman in Moscow','Amor Towles','Fiction','9780143110439','#a76150'],
+ ['The Book of Disquiet','Fernando Pessoa','Fiction','9780141183046','#c3b899'],
+ ['Meditations','Marcus Aurelius','Nonfiction','9780812968255','#786e59'],
+ ['The Name of the Wind','Patrick Rothfuss','Fantasy','9780756404741','#526c60'],
+ ['The Thursday Murder Club','Richard Osman','Mystery & Thriller','9781984880987','#c5c1a9']
+];
+export const genres = ['All', 'Nonfiction', 'Fiction', 'Sci-Fi', 'Mystery & Thriller', 'Fantasy', 'Romance'];
+export const catalogue = entries.map(([title, author, genre, isbn, color], i) => ({
+ id:`example-${i}`, title, author, genre, isbn, color,
+ ink: [0,2,6,7,8,9,14,17,20,23,25,30,33,36,38,44,47].includes(i) ? '#302b23' : '#f3ecda',
+ width: 26 + (i * 17 % 29), height: 202 + (i * 13 % 51),
+ lean: i % 9 === 0 ? -2.2 : i % 7 === 0 ? 1.5 : 0,
+ face: i % 4 === 0 ? 'sans' : i % 7 === 0 ? 'mono' : 'serif',
+ status: i < 36 ? 'read' : 'to-read',
+ cover: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`
+}));
+export function filterBooks(books, query = '', genre = 'All') {
+ const term = query.trim().toLocaleLowerCase();
+ return books.filter(book => (genre === 'All' || book.genre === genre) && `${book.title} ${book.author} ${book.isbn}`.toLocaleLowerCase().includes(term));
+}
